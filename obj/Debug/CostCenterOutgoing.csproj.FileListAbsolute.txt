@@ -1,0 +1,7 @@
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\bin\Debug\CostCenterOutgoing.exe
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\bin\Debug\CostCenterOutgoing.pdb
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\bin\Debug\SAPBusinessOneSDK.dll
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\obj\Debug\CostCenterOutgoing.csprojResolveAssemblyReference.cache
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\obj\Debug\CostCenterOutgoing.exe
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\obj\Debug\CostCenterOutgoing.pdb
+d:\users\nkurdadze\documents\visual studio 2015\Projects\CostCenterOutgoing\CostCenterOutgoing\bin\Debug\ConverterLib_x64.dll
