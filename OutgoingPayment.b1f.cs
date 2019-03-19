@@ -22,6 +22,8 @@ namespace CostCenterOutgoing
         /// </summary>
         public override void OnInitializeComponent()
         {
+            this.Button0 = ((SAPbouiCOM.Button)(this.GetItem("1").Specific));
+            this.Button0.PressedBefore += new SAPbouiCOM._IButtonEvents_PressedBeforeEventHandler(this.Button0_PressedBefore);
             this.OnCustomInitialize();
 
         }
@@ -39,6 +41,7 @@ namespace CostCenterOutgoing
         {
             if (pVal.ActionSuccess)
             {
+
                 int docEntry = 0;
                 try
                 {
@@ -51,6 +54,11 @@ namespace CostCenterOutgoing
                         Payments outgoingPayment = (SAPbobsCOM.Payments)DiManager.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
                         outgoingPayment.GetByKey(docEntry);
 
+                        if (outgoingPayment.DocType != BoRcptTypes.rSupplier)
+                        {
+                            return;
+                        }
+
                         DiManager.Recordset.DoQuery(DiManager.QueryHanaTransalte($"SELECT TransId FROM OVPM WHERE DocEntry = {docEntry}"));
 
                         int jdtTransId = int.Parse(DiManager.Recordset.Fields.Item("TransId").Value.ToString());
@@ -61,16 +69,22 @@ namespace CostCenterOutgoing
                         outgoingPayment.Invoices.SetCurrentLine(0);
                         var costCenter = outgoingPayment.Invoices.DistributionRule2;
 
+                        if (string.IsNullOrWhiteSpace(costCenter))
+                        {
+                            return;
+                        }
+
                         for (int i = 0; i < journalEntry.Lines.Count; i++)
                         {
                             journalEntry.Lines.SetCurrentLine(i);
                             if (journalEntry.Lines.AccountCode == "1430")
                             {
                                 journalEntry.Lines.CostingCode2 = costCenter;
+                                var xz = journalEntry.Update();
                             }
                         }
 
-                       var xz =  journalEntry.Update();
+                     
                     }
                     else
                     {
@@ -89,6 +103,14 @@ namespace CostCenterOutgoing
 
         private void OnCustomInitialize()
         {
+
+        }
+
+        private Button Button0;
+
+        private void Button0_PressedBefore(object sboObject, SBOItemEventArg pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
 
         }
     }
