@@ -50,9 +50,18 @@
     <Reference Include="SAPBusinessOneSDK" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="APInvoice.b1f">
+      <FormCategory>SystemForm</FormCategory>
+    </None>
+    <None Include="APInvoice.b1f__orig_srf">
+      <DependentUpon>APInvoice.b1f</DependentUpon>
+    </None>
     <None Include="Form1.b1f">
       <FormCategory>UserForm</FormCategory>
     </None>
+    <Compile Include="APInvoice.b1f.cs">
+      <DependentUpon>APInvoice.b1f</DependentUpon>
+    </Compile>
     <Compile Include="DiManager.cs" />
     <Compile Include="Form1.b1f.cs">
       <DependentUpon>Form1.b1f</DependentUpon>
