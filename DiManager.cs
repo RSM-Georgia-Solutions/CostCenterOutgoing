@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,28 @@ namespace CostCenterOutgoing
         public static Recordset Recordset => recSet.Value;
         public static Company Company => xCompany.Value;
         public static bool IsHana => IsHanax.Value;
+        public static Dimension EmployeeDimension => EmployeeDimensionx.Value;
 
+ 
+
+        public enum Dimension
+        {
+            Dimention1 = 1,
+            Dimention2,
+            Dimention3,
+            Dimention4,
+            Dimention5,
+        }
+
+        private static Dimension GetDimention()
+        {
+            Recordset.DoQuery(QueryHanaTransalte($"select DimCode from ODIM where DimActive ='Y' AND DimDesc = N'თანამშრომლები'"));
+            int dimCode = int.Parse(Recordset.Fields.Item(0).Value.ToString(), CultureInfo.InvariantCulture);
+            return (Dimension) dimCode;
+        }
+
+        private static readonly Lazy<Dimension> EmployeeDimensionx =
+            new Lazy<Dimension>(GetDimention);
 
         private static readonly Lazy<bool> IsHanax =
             new Lazy<bool>(() => Company.DbServerType.ToString() == "dst_HANADB" ? true : false);

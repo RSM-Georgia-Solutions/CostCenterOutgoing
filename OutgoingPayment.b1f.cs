@@ -41,7 +41,6 @@ namespace CostCenterOutgoing
         {
             if (pVal.ActionSuccess)
             {
-
                 int docEntry = 0;
                 try
                 {
@@ -53,7 +52,7 @@ namespace CostCenterOutgoing
                         docEntry = int.Parse(xElement.Value);
                         Payments outgoingPayment = (SAPbobsCOM.Payments)DiManager.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oVendorPayments);
                         outgoingPayment.GetByKey(docEntry);
-
+                      
                         if (outgoingPayment.DocType != BoRcptTypes.rSupplier)
                         {
                             return;
@@ -68,6 +67,24 @@ namespace CostCenterOutgoing
 
                         outgoingPayment.Invoices.SetCurrentLine(0);
                         var costCenter = outgoingPayment.Invoices.DistributionRule2;
+                        switch (DiManager.EmployeeDimension)
+                        {
+                            case DiManager.Dimension.Dimention1:
+                                costCenter = outgoingPayment.Invoices.DistributionRule;
+                                break;
+                            case DiManager.Dimension.Dimention2:
+                                costCenter = outgoingPayment.Invoices.DistributionRule2;
+                                break;
+                            case DiManager.Dimension.Dimention3:
+                                costCenter = outgoingPayment.Invoices.DistributionRule3;
+                                break;
+                            case DiManager.Dimension.Dimention4:
+                                costCenter = outgoingPayment.Invoices.DistributionRule4;
+                                break;
+                            case DiManager.Dimension.Dimention5:
+                                costCenter = outgoingPayment.Invoices.DistributionRule5;
+                                break;
+                        }
 
                         if (string.IsNullOrWhiteSpace(costCenter))
                         {
@@ -79,23 +96,45 @@ namespace CostCenterOutgoing
                             journalEntry.Lines.SetCurrentLine(i);
                             if (journalEntry.Lines.AccountCode == "1430")
                             {
-                                journalEntry.Lines.CostingCode2 = costCenter;
-                                var xz = journalEntry.Update();
+                                switch (DiManager.EmployeeDimension)
+                                {
+                                    case DiManager.Dimension.Dimention1 :
+                                        journalEntry.Lines.CostingCode = costCenter;
+                                        journalEntry.Update();
+                                        break;
+                                    case DiManager.Dimension.Dimention2 :
+                                        journalEntry.Lines.CostingCode2 = costCenter;
+                                        journalEntry.Update();
+                                        break;
+                                    case DiManager.Dimension.Dimention3 :
+                                        journalEntry.Lines.CostingCode3 = costCenter;
+                                        journalEntry.Update();
+                                        break;
+                                    case DiManager.Dimension.Dimention4 :
+                                        journalEntry.Lines.CostingCode4 = costCenter;
+                                        journalEntry.Update();
+                                        break;
+                                    case DiManager.Dimension.Dimention5 :
+                                        journalEntry.Lines.CostingCode5 = costCenter;
+                                        journalEntry.Update();
+                                        break;
+                                    default :
+                                        throw new ArgumentOutOfRangeException();
+                                }
                             }
                         }
-
-                     
                     }
                     else
                     {
                         Application.SBO_Application.SetStatusBarMessage("Outgoing Payment DocEntry Not Found",
-                            BoMessageTime.bmt_Short, true);
+                            BoMessageTime.bmt_Short);
                     }
 
                 }
                 catch (Exception e)
                 {
-                    // ignored
+                    Application.SBO_Application.SetStatusBarMessage(e.Message,
+                        BoMessageTime.bmt_Short, true);
                 }
             }
 

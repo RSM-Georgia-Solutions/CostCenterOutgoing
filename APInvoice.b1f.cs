@@ -91,7 +91,7 @@ namespace CostCenterOutgoing
                 journalEntry.GetByKey(jdtTransId);
 
                 outgoingPayment.Invoices.SetCurrentLine(0);
-                 
+
 
                 if (string.IsNullOrWhiteSpace(costCenterCode))
                 {
@@ -103,8 +103,29 @@ namespace CostCenterOutgoing
                     journalEntry.Lines.SetCurrentLine(i);
                     if (journalEntry.Lines.AccountCode == "1430")
                     {
-                        journalEntry.Lines.CostingCode2 = costCenterCode;
-                        var xz = journalEntry.Update();
+                        switch (DiManager.EmployeeDimension)
+                        {
+                            case DiManager.Dimension.Dimention1 :
+                                journalEntry.Lines.CostingCode = costCenterCode;
+                                journalEntry.Update();
+                                break;
+                            case DiManager.Dimension.Dimention2 :
+                                journalEntry.Lines.CostingCode2 = costCenterCode;
+                                journalEntry.Update();
+                                break;
+                            case DiManager.Dimension.Dimention3 :
+                                journalEntry.Lines.CostingCode3 = costCenterCode;
+                                journalEntry.Update();
+                                break;
+                            case DiManager.Dimension.Dimention4 :
+                                journalEntry.Lines.CostingCode4 = costCenterCode;
+                                journalEntry.Update();
+                                break;
+                            case DiManager.Dimension.Dimention5 :
+                                journalEntry.Lines.CostingCode5 = costCenterCode;
+                                journalEntry.Update();
+                                break;
+                        }
                     }
                 }
             }
